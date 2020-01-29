@@ -55,7 +55,7 @@
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="含义" :label-width="formLabelWidth">
-          <el-input v-model="form.meaning" autocomplete="off"></el-input>
+          <el-input type="textarea" v-model="form.meaning" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="例子" :label-width="formLabelWidth">
           <el-input type="textarea" v-model="form.example" autocomplete="off"></el-input>
@@ -123,7 +123,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[10, 20, 30]"
+        :page-sizes="[5, 10, 20, 30]"
         :page-size="sizePage"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
