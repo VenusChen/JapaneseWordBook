@@ -10,6 +10,7 @@
               <el-option label="名称" value="name"></el-option>
               <el-option label="词性" value="type"></el-option>
               <el-option label="含义" value="meaning"></el-option>
+              <el-option label="使用率" value="level"></el-option>
               <el-option label="出现次数" value="count"></el-option>
             </el-select>
             <el-button slot="append" icon="el-icon-search" @click="getList(0, sizePage)"></el-button>

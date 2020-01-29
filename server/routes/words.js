@@ -66,6 +66,8 @@ router.get('/list', function (req, res, next) {
     } else {
       cond.count = req.query.count;
     }
+  } else if (req.query.level) {
+    cond.level = req.query.level;
   } else if (Object.keys(req.query).length) {
     for (const key in req.query) {
       cond[key] = new RegExp(req.query[key]);
