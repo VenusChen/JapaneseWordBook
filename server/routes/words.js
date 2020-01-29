@@ -49,8 +49,30 @@ router.get('/', function (req, res, next) {
 
 /* GET users listing. */
 router.get('/list', function (req, res, next) {
-  WordModel.find({}).skip(Number(req.query.skip)).limit(Number(req.query.limit)).sort({ createdAt: -1 }).exec((err, result) => {
-    WordModel.countDocuments({}, (err, total) => {
+  const skip = Number(req.query.skip);
+  const limit = Number(req.query.limit);
+  delete req.query.skip;
+  delete req.query.limit;
+  const cond = {};
+  if (req.query.count) {
+    if (req.query.count.includes('>=')) {
+      cond.count = { $gte: req.query.count.slice(2) };
+    } else if (req.query.count.includes('<=')) {
+      cond.count = { $lte: req.query.count.slice(2) };
+    } else if (req.query.count.includes('>')) {
+      cond.count = { $gt: req.query.count.slice(1) };
+    } else if (req.query.count.includes('<')) {
+      cond.count = { $lt: req.query.count.slice(1) };
+    } else {
+      cond.count = req.query.count;
+    }
+  } else if (Object.keys(req.query).length) {
+    for (const key in req.query) {
+      cond[key] = new RegExp(req.query[key]);
+    }
+  }
+  WordModel.find(cond).skip(skip).limit(limit).sort({ createdAt: -1 }).exec((err, result) => {
+    WordModel.countDocuments(cond, (err, total) => {
       res.send({ list: result, total });
     })
   });

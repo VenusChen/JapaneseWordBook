@@ -1,9 +1,27 @@
 <template>
   <div>
     <h1 align="center">单词列表</h1>
-    <div id="addButton">
-      <el-button type="text" @click="dialogFormVisible = true" icon="el-icon-plus">新建单词</el-button>
-    </div>
+
+    <el-row>
+      <el-col :span="12">
+        <div style="margin-bottom: 15px;">
+          <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
+            <el-select v-model="select" slot="prepend" placeholder="请选择">
+              <el-option label="名称" value="name"></el-option>
+              <el-option label="词性" value="type"></el-option>
+              <el-option label="含义" value="meaning"></el-option>
+              <el-option label="出现次数" value="count"></el-option>
+            </el-select>
+            <el-button slot="append" icon="el-icon-search" @click="getList(0, sizePage)"></el-button>
+          </el-input>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div id="addButton">
+          <el-button type="text" @click="dialogFormVisible = true" icon="el-icon-plus">新建单词</el-button>
+        </div>
+      </el-col>
+    </el-row>
 
     <el-dialog title="单词" :visible.sync="dialogFormVisible" :before-close="handleClickCancel">
       <el-form :model="form">
@@ -124,15 +142,18 @@ export default {
   },
   methods: {
     getList(skip, limit) {
+      const params = {
+        skip,
+        limit
+      };
+      if (this.input && this.select) {
+        params[this.select] = this.input;
+      }
       this.$axios({
         method: "get",
         url: this.address + "/word/list",
-        params: {
-          skip,
-          limit
-        }
+        params
       }).then(res => {
-        // window.console.log(res.data);
         if (res.data.list) {
           for (const data of res.data.list) {
             data.createdAt = new Date(data.createdAt).toLocaleString();
@@ -261,6 +282,8 @@ export default {
 
   data() {
     return {
+      input: "",
+      select: "",
       address: "http://localhost:3000",
       total: 0,
       currentPage: 1,
@@ -283,7 +306,7 @@ export default {
   background: lightblue;
 }
 .el-table .grap-row {
-  background: #E8E8E8;
+  background: #e8e8e8;
 }
 .el-table .orange-row {
   background: orange;
@@ -296,6 +319,13 @@ export default {
 }
 .el-table .purple-row {
   background: magenta;
+}
+
+.el-select .el-input {
+  width: 130px;
+}
+.input-with-select .el-input-group__prepend {
+  background-color: #fff;
 }
 
 #addButton {
