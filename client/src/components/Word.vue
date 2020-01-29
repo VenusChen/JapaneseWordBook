@@ -80,7 +80,7 @@
       </div>
     </el-dialog>
 
-    <el-table :data="tableData" border style="width: 100%" :row-class-name="tableRowClassName">
+    <el-table :data="tableData" border style="width: 100%" :row-class-name="tableRowClassName" height="550">
       <el-table-column type="index" label="序号" align="center" width="50"></el-table-column>
       <el-table-column prop="name" label="名称" align="center"></el-table-column>
       <el-table-column prop="pronunciation" label="读音" align="center"></el-table-column>
