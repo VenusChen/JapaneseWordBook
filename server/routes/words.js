@@ -53,6 +53,16 @@ router.get('/list', function (req, res, next) {
   const limit = Number(req.query.limit);
   delete req.query.skip;
   delete req.query.limit;
+  const sort = {};
+  switch (req.query.sort) {
+    case '1':
+      sort.createdAt = -1;
+      break;
+    case '2':
+      sort.count = -1;
+      break;
+  }
+  delete req.query.sort;
   const cond = {};
   if (req.query.count) {
     if (req.query.count.includes('>=')) {
@@ -73,7 +83,7 @@ router.get('/list', function (req, res, next) {
       cond[key] = new RegExp(req.query[key]);
     }
   }
-  WordModel.find(cond).skip(skip).limit(limit).sort({ createdAt: -1 }).exec((err, result) => {
+  WordModel.find(cond).skip(skip).limit(limit).sort(sort).exec((err, result) => {
     WordModel.countDocuments(cond, (err, total) => {
       res.send({ list: result, total });
     })

@@ -17,7 +17,25 @@
           </el-input>
         </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="4">
+        <div id="addButton">
+          排序
+          <el-select @change="selectSort" v-model="sortValue" placeholder="请选择">
+            <el-option
+              v-for="item in sortOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <div id="addButton">
+          <el-button type="text" @click="dialogFormVisible = true" icon="el-icon-plus">新建单词</el-button>
+        </div>
+      </el-col>
+      <el-col :span="4">
         <div id="addButton">
           <el-button type="text" @click="dialogFormVisible = true" icon="el-icon-plus">新建单词</el-button>
         </div>
@@ -80,7 +98,13 @@
       </div>
     </el-dialog>
 
-    <el-table :data="tableData" border style="width: 100%" :row-class-name="tableRowClassName" height="550">
+    <el-table
+      :data="tableData"
+      border
+      style="width: 100%"
+      :row-class-name="tableRowClassName"
+      height="550"
+    >
       <el-table-column type="index" label="序号" align="center" width="50"></el-table-column>
       <el-table-column prop="name" label="名称" align="center"></el-table-column>
       <el-table-column prop="pronunciation" label="读音" align="center"></el-table-column>
@@ -129,7 +153,6 @@
         :total="total"
       ></el-pagination>
     </div>
-    
   </div>
 </template>
 
@@ -146,7 +169,8 @@ export default {
     getList(skip, limit) {
       const params = {
         skip,
-        limit
+        limit,
+        sort: this.sortValue
       };
       if (this.input && this.select) {
         params[this.select] = this.input;
@@ -257,6 +281,9 @@ export default {
       this.currentPage = val;
       this.getList((this.currentPage - 1) * this.sizePage, this.sizePage);
     },
+    selectSort() {
+      this.getList(0, this.sizePage);
+    },
     tableRowClassName({ row, rowIndex }) {
       if (row.count && row.count >= 5) {
         if (row.count >= 30) {
@@ -294,7 +321,18 @@ export default {
       fullscreenLoading: false,
       dialogFormVisible: false,
       form: { type: [] },
-      formLabelWidth: "100px"
+      formLabelWidth: "100px",
+      sortOptions: [
+        {
+          value: "1",
+          label: "创建时间"
+        },
+        {
+          value: "2",
+          label: "出现次数"
+        }
+      ],
+      sortValue: "1"
     };
   }
 };
