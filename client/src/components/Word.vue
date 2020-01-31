@@ -19,7 +19,6 @@
       </el-col>
       <el-col :span="4">
         <div id="addButton">
-          排序
           <el-select @change="selectSort" v-model="sortValue" placeholder="请选择">
             <el-option
               v-for="item in sortOptions"
@@ -32,7 +31,14 @@
       </el-col>
       <el-col :span="4">
         <div id="addButton">
-          <el-button type="text" @click="dialogFormVisible = true" icon="el-icon-plus">新建单词</el-button>
+          <el-select @change="selectModel" v-model="modelValue" placeholder="请选择">
+            <el-option
+              v-for="item in modelOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </div>
       </el-col>
       <el-col :span="4">
@@ -185,10 +191,13 @@ export default {
             data.createdAt = new Date(data.createdAt).toLocaleString();
             data.typeString = data.type.toString();
             data.count = data.count || 0;
+            data.originName = data.name;
+            data.originMeaning = data.meaning;
           }
           this.tableData = res.data.list;
           this.total = res.data.total;
           this.fullscreenLoading = false;
+          this.selectModel();
         }
       });
     },
@@ -284,6 +293,39 @@ export default {
     selectSort() {
       this.getList(0, this.sizePage);
     },
+    selectModel() {
+      switch (this.modelValue) {
+        case "1":
+          for (const data of this.tableData) {
+            data.name = data.originName;
+            data.meaning = data.originMeaning;
+          }
+          break;
+        case "2":
+          for (const data of this.tableData) {
+            data.name = "";
+            data.meaning = data.originMeaning;
+          }
+          break;
+        case "3":
+          for (const data of this.tableData) {
+            data.name = data.originName;
+            data.meaning = "";
+          }
+          break;
+        case "4":
+          for (const data of this.tableData) {
+            if (Math.random() < 0.5) {
+              data.name = data.originName;
+              data.meaning = "";
+            } else {
+              data.name = "";
+              data.meaning = data.originMeaning;
+            }
+          }
+          break;
+      }
+    },
     tableRowClassName({ row, rowIndex }) {
       if (row.count && row.count >= 5) {
         if (row.count >= 30) {
@@ -325,14 +367,41 @@ export default {
       sortOptions: [
         {
           value: "1",
-          label: "创建时间"
+          label: "时间倒序"
         },
         {
           value: "2",
-          label: "出现次数"
+          label: "次数高低"
+        },
+        {
+          value: "3",
+          label: "时间正序"
+        },
+        {
+          value: "4",
+          label: "次数低高"
         }
       ],
-      sortValue: "1"
+      sortValue: "1",
+      modelOptions: [
+        {
+          value: "1",
+          label: "正常显示"
+        },
+        {
+          value: "2",
+          label: "隐藏名称"
+        },
+        {
+          value: "3",
+          label: "隐藏含义"
+        },
+        {
+          value: "4",
+          label: "随机隐藏"
+        }
+      ],
+      modelValue: "1"
     };
   }
 };

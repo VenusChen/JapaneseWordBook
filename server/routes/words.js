@@ -61,6 +61,12 @@ router.get('/list', function (req, res, next) {
     case '2':
       sort.count = -1;
       break;
+    case '3':
+      sort.createdAt = 1;
+      break;
+    case '4':
+      sort.count = 1;
+      break;
   }
   delete req.query.sort;
   const cond = {};
