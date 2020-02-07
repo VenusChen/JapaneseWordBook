@@ -64,6 +64,7 @@
             <el-checkbox label="na形容词"></el-checkbox>
             <el-checkbox label="形容动词"></el-checkbox>
             <el-checkbox label="副词"></el-checkbox>
+            <el-checkbox label="代词"></el-checkbox>
             <el-checkbox label="他动词"></el-checkbox>
             <el-checkbox label="助词"></el-checkbox>
             <el-checkbox label="副助词"></el-checkbox>
